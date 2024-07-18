@@ -124,7 +124,7 @@ class TestRequestsCollections:
 
     @allure.feature("PUT - /posts")
     @allure.story("Изменение существующего поста")
-    def test_update_post(self, base_url):
+    def test_update_exist_post(self, base_url):
         url = base_url + '/posts/1'
         headers = {
             'Content-Type': 'application/json; charset=UTF-8'
