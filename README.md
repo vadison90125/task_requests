@@ -1,7 +1,8 @@
 # Test Requests
 ![Crates.io](https://img.shields.io/badge/Python-Pytest-yellow)
 ![Crates.io](https://img.shields.io/badge/Allure-8A2BE2)
-##### Базовый url - https://jsonplaceholder.typicode.com
+
+Базовый url - https://jsonplaceholder.typicode.com
 
 * GET - /posts
 * POST  - /posts
@@ -16,7 +17,7 @@
 
 # Установка Allure
 
-PowerShell:
+В терминале PowerShell выполнить команды:
 ```sh
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
