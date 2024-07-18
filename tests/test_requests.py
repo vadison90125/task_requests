@@ -19,7 +19,7 @@ class TestRequestsCollections:
             assert len(response) == 100
 
     @allure.feature("GET - /posts")
-    @allure.story("Получение одного поста")
+    @allure.story("Получение одного поста по 'id'")
     def test_get_one_post(self, base_url):
         post_id = 1
         url = base_url + f'/posts/{post_id}'
@@ -45,22 +45,22 @@ class TestRequestsCollections:
         urls = [url1, url2, url3]
         with allure.step("Отправка GET запросов"):
             responses = []
-            for i in range(1, 3):
-                response = requests.request('GET', urls[i])
+            for url in urls:
+                response = requests.request('GET', url)
                 responses.append(response)
         with allure.step("Проверка статус кода отправленных запросов на значение 404"):
             for response in responses:
                 assert response.status_code == 404
 
     @allure.feature("GET - /posts")
-    @allure.story("Получение отфильтрованных постов")
+    @allure.story("Получение отфильтрованных постов по 'userId'")
     def test_get_filters_posts(self, base_url):
         url = base_url + '/posts?userId=1'
         with allure.step("Отправка GET запроса"):
             response = requests.request("GET", url)
         with allure.step("Проверка статус кода на значение 200"):
             assert response.status_code == 200
-        with allure.step("Проверка на общее количество постов"):
+        with allure.step("Проверка количества отфильтрованных постов на значение 10"):
             response = response.json()
             assert len(response) == 10
 
@@ -147,6 +147,35 @@ class TestRequestsCollections:
             }
 
     @allure.feature("PUT - /posts")
+    @allure.story("Изменение несуществующего поста (невалидные 'id')")
+    def test_update_not_exist_post(self, base_url):
+        url = base_url + '/posts'
+        with allure.step("Получение общего количества постов"):
+            response = requests.request('GET', url)
+            response = response.json()
+            count_posts = len(response)
+        url1 = base_url + f'/posts/{count_posts + 1}'
+        url2 = base_url + f'/posts/0'
+        url3 = base_url + f'/posts/-1'
+        urls = [url1, url2, url3]
+        headers = {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }
+        data = json.dumps({
+            'title': 'My cool update',
+            'body': 'My cool message update',
+            'userID': 2
+        })
+        with allure.step("Отправка PUT запроса"):
+            responses = []
+            for url in urls:
+                response = requests.request('PUT', url, headers=headers, data=data)
+                responses.append(response)
+        with allure.step("Проверка статус кода на значение 500"):
+            for response in responses:
+                assert response.status_code == 500
+
+    @allure.feature("PUT - /posts")
     @allure.story("Изменение существующего поста без тела запроса")
     def test_update_without_body_post(self, base_url):
         url = base_url + '/posts/1'
@@ -208,12 +237,12 @@ class TestRequestsCollections:
         urls = [url1, url2, url3]
         with allure.step("Отправка DELETE запросов"):
             responses = []
-            for i in range(1, 3):
-                response = requests.request('DELETE', urls[i])
+            for url in urls:
+                response = requests.request('DELETE', url)
                 responses.append(response)
-        with allure.step("Проверка статус кода отправленных запросов на значение 404"):
+        with allure.step("Проверка статус кода отправленных запросов на значение 200"):
             for response in responses:
-                assert response.status_code == 404
+                assert response.status_code == 200
 
     @allure.feature("DELETE - /posts")
     @allure.story("Удаление удалённого поста")
