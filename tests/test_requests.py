@@ -60,7 +60,7 @@ class TestRequestsCollections:
             response = requests.request("GET", url)
         with allure.step("Проверка статус кода на значение 200"):
             assert response.status_code == 200
-        with allure.step("Проверка количества отфильтрованных постов на значение 10"):
+        with allure.step("Проверка количества отфильтрованных постов по 'userId' на значение 10"):
             response = response.json()
             assert len(response) == 10
 
@@ -199,7 +199,7 @@ class TestRequestsCollections:
             'Content-Type': 'application/json; charset=UTF-8'
         }
         data = json.dumps({
-                'title': 'My cool title'
+                'title': 'My cool title update'
         })
         with allure.step("Отправка PUT запроса"):
             response = requests.request('PUT', url, headers=headers, data=data)
@@ -208,7 +208,7 @@ class TestRequestsCollections:
         with (allure.step("Проверка изменений в посте")):
             assert response.json() == {
                 'id': 100,
-                'title': 'My cool title'
+                'title': 'My cool title update'
             }
 
     @allure.feature("DELETE - /posts")
