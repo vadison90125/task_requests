@@ -299,7 +299,7 @@ class TestRequestsCollections:
             assert response.status_code == 404
 
     @allure.feature("DELETE - /posts")
-    @allure.story("Удаление без 'id'")
+    @allure.story("Удаление без указания 'id'")
     def test_delete_all_posts(self, base_url):
         url = base_url + f'/posts'
         with allure.step("Отправка DELETE запроса"):
