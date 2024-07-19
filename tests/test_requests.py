@@ -304,5 +304,5 @@ class TestRequestsCollections:
         url = base_url + f'/posts'
         with allure.step("Отправка DELETE запроса"):
             response = requests.request('DELETE', url)
-        with allure.step("Проверка статус кода на значение 200"):
+        with allure.step("Проверка статус кода на значение 404"):
             assert response.status_code == 404
