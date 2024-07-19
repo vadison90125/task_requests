@@ -2,6 +2,7 @@ from conftest import base_url
 import requests
 import allure
 import json
+import random
 
 
 class TestRequestsCollections:
@@ -21,7 +22,10 @@ class TestRequestsCollections:
     @allure.feature("GET - /posts")
     @allure.story("Получение одного поста по 'id'")
     def test_get_one_post(self, base_url):
-        post_id = 1
+        url = base_url + '/posts'
+        response = requests.request("GET", url)
+        count_posts = len(response.json())
+        post_id = random.randint(1, count_posts)
         url = base_url + f'/posts/{post_id}'
         with allure.step("Отправка GET запроса"):
             response = requests.request('GET', url)
