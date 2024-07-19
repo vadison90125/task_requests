@@ -301,7 +301,16 @@ class TestRequestsCollections:
     @allure.feature("DELETE - /posts")
     @allure.story("Удаление без указания 'id'")
     def test_delete_all_posts(self, base_url):
-        url = base_url + f'/posts'
+        url = base_url + '/posts'
+        with allure.step("Отправка DELETE запроса"):
+            response = requests.request('DELETE', url)
+        with allure.step("Проверка статус кода на значение 404"):
+            assert response.status_code == 404
+
+    @allure.feature("DELETE - /posts")
+    @allure.story("Удаление отфильтрованных постов по 'userId'")
+    def test_delete_filtered_posts(self, base_url):
+        url = base_url + '/posts?userId=1'
         with allure.step("Отправка DELETE запроса"):
             response = requests.request('DELETE', url)
         with allure.step("Проверка статус кода на значение 404"):
