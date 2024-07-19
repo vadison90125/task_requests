@@ -216,9 +216,12 @@ class TestRequestsCollections:
             }
 
     @allure.feature("DELETE - /posts")
-    @allure.story("Удаление существующего поста")
+    @allure.story("Удаление существующего поста по 'id'")
     def test_delete_exist_post(self, base_url):
-        post_id = 1
+        url = base_url + '/posts'
+        response = requests.request("GET", url)
+        count_posts = len(response.json())
+        post_id = random.randint(1, count_posts)
         url = base_url + f'/posts/{post_id}'
         with allure.step("Отправка DELETE запроса"):
             response = requests.request('DELETE', url)
@@ -293,4 +296,13 @@ class TestRequestsCollections:
         with allure.step("Отправка GET запроса"):
             response = requests.request("GET", url)
         with allure.step("Проверка статус кода на значение 404"):
+            assert response.status_code == 404
+
+    @allure.feature("DELETE - /posts")
+    @allure.story("Удаление поста без 'id'")
+    def test_delete_all_posts(self, base_url):
+        url = base_url + f'/posts'
+        with allure.step("Отправка DELETE запроса"):
+            response = requests.request('DELETE', url)
+        with allure.step("Проверка статус кода на значение 200"):
             assert response.status_code == 404
